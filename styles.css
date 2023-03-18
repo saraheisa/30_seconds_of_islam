@@ -30,6 +30,20 @@ body {
     radial-gradient(at 47% 89%, hsla(71, 38%, 18%, 1) 0px, transparent 50%);
 }
 
+.mandala {
+  height: 70px;
+}
+
+.mandala.upside-down {
+  transform: rotate(180deg);
+  margin-top: 20px;
+}
+
+.mandala img {
+  height: 100%;
+  filter: contrast(0.5);
+}
+
 .ayah-container {
   display: flex;
   flex-direction: column;
@@ -45,6 +59,7 @@ body {
   -webkit-backdrop-filter: blur(0px);
   font-size: 2rem;
   font-weight: bold;
+  margin: 10px 0;
 }
 
 .ayah-translation {
@@ -132,4 +147,8 @@ body {
   box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
   backdrop-filter: blur(4px);
   -webkit-backdrop-filter: blur(4px);
+}
+
+.ayah-container.light-theme .mandala img {
+  filter: brightness(0.5);
 }
