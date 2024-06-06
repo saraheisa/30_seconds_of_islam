@@ -4,6 +4,11 @@ const recitationButton = document.querySelector(".recitation-button");
 const themeToggle = document.querySelector("#theme-switch");
 
 const apiUrl = "https://api.alquran.cloud/v1/ayah/random";
+const THEME_OPTIONS = {
+  Dark: "dark",
+  LIGHT: "light",
+};
+const THEME_KEY = "30_seconds_of_islam_theme_selection";
 
 let currentAyahNumber = 0;
 const bitrate = 64;
@@ -34,25 +39,48 @@ async function getRandomAyah() {
   }
 }
 
-getRandomAyah();
+function storeThemeSelection(theme) {
+  if (theme !== THEME_OPTIONS.Dark && theme !== THEME_OPTIONS.LIGHT) return;
+  window.localStorage.setItem(THEME_KEY, theme);
+}
 
-recitationButton.addEventListener("click", () => {
-  // Make a request to the Quran API to get the recitation audio URL for the current ayah
-  const audioURL = `https://cdn.islamic.network/quran/audio/${bitrate}/${edition}/${currentAyahNumber}.mp3`;
-  const audio = new Audio(audioURL);
-  audio.play();
-});
+function getThemeSelection() {
+  return window.localStorage.getItem(THEME_KEY) || THEME_OPTIONS.Dark;
+}
 
-// Handle theme toggle switch
-themeToggle.addEventListener("change", () => {
+function applyTheme(theme) {
   const container = document.querySelector("#container");
   const ayahContainer = document.querySelector(".ayah-container");
 
-  if (themeToggle.checked) {
+  if (theme === THEME_OPTIONS.LIGHT) {
     container.classList.add("light-theme");
     ayahContainer.classList.add("light-theme");
   } else {
     container.classList.remove("light-theme");
     ayahContainer.classList.remove("light-theme");
   }
+}
+
+function setInitialTheme(theme) {
+  if (theme !== THEME_OPTIONS.Dark && theme !== THEME_OPTIONS.LIGHT) return;
+  themeToggle.checked = theme === THEME_OPTIONS.LIGHT;
+  applyTheme(theme);
+}
+
+getRandomAyah();
+const selectedTheme = getThemeSelection();
+setInitialTheme(selectedTheme);
+
+recitationButton.addEventListener("click", () => {
+  const audioURL = `https://cdn.islamic.network/quran/audio/${bitrate}/${edition}/${currentAyahNumber}.mp3`;
+  const audio = new Audio(audioURL);
+  audio.play();
+});
+
+themeToggle.addEventListener("change", () => {
+  const newTheme = themeToggle.checked
+    ? THEME_OPTIONS.LIGHT
+    : THEME_OPTIONS.Dark;
+  applyTheme(newTheme);
+  storeThemeSelection(newTheme);
 });
