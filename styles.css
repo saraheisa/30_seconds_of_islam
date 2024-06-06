@@ -104,6 +104,8 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+  width: 72px;
+  height: 52px;
 }
 
 .bookmark-button:hover,
@@ -117,10 +119,20 @@ body {
   height: 32px;
 }
 
+.theme-toggle {
+  padding: 0;
+  position: relative;
+}
+
 .theme-toggle input[type="checkbox"] {
-  height: 0;
-  width: 0;
-  visibility: hidden;
+  height: 100%;
+  width: 100%;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.theme-toggle input[type="checkbox"] + label {
+  position: absolute;
 }
 
 .theme-toggle input[type="checkbox"] + label:before {
@@ -128,6 +140,9 @@ body {
   color: #f1c40f;
   /* font-size: 1.5rem; */
   cursor: pointer;
+  position: absolute;
+  top: 15px;
+  left: 25px;
 }
 
 .theme-toggle input[type="checkbox"]:checked + label:before {
