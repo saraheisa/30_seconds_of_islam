@@ -131,10 +131,6 @@ body {
   cursor: pointer;
 }
 
-.theme-toggle input[type="checkbox"] + label {
-  position: absolute;
-}
-
 .theme-toggle input[type="checkbox"] + label:before {
   content: "☀️";
   color: #f1c40f;
