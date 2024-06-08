@@ -1,5 +1,6 @@
 # 30 Seconds of Islam
-This is a Chrome extension that displays a random ayah (verse) from the Quran every time you open a new tab. The extension also includes a recitation feature that allows you to listen to the ayah.
+This is a Chrome extension that displays a random ayah (verse) from the Quran every time you open a new tab. The extension also includes a recitation feature that allows you to listen to the ayah. You can also change the app mode to Khatma mode, which displays the ayat in order.
+
 
 ## Installation
 To install the extension, follow these steps:
