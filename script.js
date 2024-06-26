@@ -11,7 +11,7 @@ const THEME_KEY = "30_seconds_of_islam_theme_selection";
 
 let currentAyahNumber = 0;
 const bitrate = 64;
-const audioEdition = "ar.alafasy";
+// let audioEdition = "ar.alafasy";
 const edition = "quran-uthmani";
 const translationEdition = "en.asad";
 

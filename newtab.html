@@ -10,28 +10,48 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="settings.css" />
     <title>30 Seconds of Islam</title>
   </head>
   <body>
     <div id="container">
       <div class="ayah-container">
         <div class="mandala">
-          <img src="mandala.png" />
+          <img src="assets/images/mandala.png" />
         </div>
         <p class="ayah-text">Loading...</p>
         <p class="ayah-translation"></p>
         <div class="mandala upside-down">
-          <img src="mandala.png" />
+          <img src="assets/images/mandala.png" />
         </div>
       </div>
       <div class="options-container">
-        <button class="recitation-button"><img src="audio.svg" /></button>
+        <button class="recitation-button">
+          <img src="assets/images/audio.svg" />
+        </button>
         <div class="theme-toggle">
           <input type="checkbox" id="theme-switch" />
           <label for="theme-switch"></label>
         </div>
+        <button class="settings-button">
+          <img src="assets/images/settings.svg" />
+        </button>
       </div>
     </div>
+
+    <!-- Settings Modal -->
+    <div id="settings-modal" class="modal">
+      <div class="modal-content">
+        <span class="close-button">&times;</span>
+        <h2>Settings</h2>
+        <div class="select-container">
+          <label for="reciter-select">Select Reciter:</label>
+          <select id="reciter-select"></select>
+        </div>
+      </div>
+    </div>
+
     <script src="script.js"></script>
+    <script src="settings.js"></script>
   </body>
 </html>

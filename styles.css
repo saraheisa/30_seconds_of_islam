@@ -87,7 +87,8 @@ body {
 
 .bookmark-button,
 .recitation-button,
-.theme-toggle {
+.theme-toggle,
+.settings-button {
   padding: 10px 20px;
   margin: 0 10px;
   border: none;
@@ -110,11 +111,13 @@ body {
 
 .bookmark-button:hover,
 .recitation-button:hover,
-.theme-toggle:hover {
+.theme-toggle:hover,
+.settings-button:hover {
   background: rgb(255 255 255 / 27%);
 }
 
-.recitation-button img {
+.recitation-button img,
+.settings-button img {
   width: 32px;
   height: 32px;
 }
