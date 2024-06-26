@@ -1,5 +1,6 @@
 const settingsButton = document.querySelector(".settings-button");
 const modal = document.getElementById("settings-modal");
+const modalContent = modal.querySelector(".modal-content");
 const closeButton = document.querySelector(".close-button");
 const reciterSelect = document.getElementById("reciter-select");
 
@@ -29,12 +30,16 @@ async function populateReciterSelect() {
       reciterSelect.appendChild(option);
     });
 
-    // Set the initial value from localStorage
     const storedReciter = audioEdition;
     reciterSelect.value = storedReciter;
   } catch (error) {
     console.log(error);
   }
+}
+
+function closeModal() {
+  modal.classList.add("fade-out");
+  modalContent.classList.add("slide-out");
 }
 
 settingsButton.addEventListener("click", () => {
@@ -43,15 +48,7 @@ settingsButton.addEventListener("click", () => {
 });
 
 closeButton.addEventListener("click", () => {
-  modal.classList.add("fade-out");
-  const modalContent = modal.querySelector(".modal-content");
-  modalContent.classList.add("slide-out");
-
-  modalContent.addEventListener("animationend", () => {
-    modal.style.display = "none";
-    modal.classList.remove("fade-out");
-    modalContent.classList.remove("slide-out");
-  });
+  closeModal();
 });
 
 reciterSelect.addEventListener("change", () => {
@@ -63,14 +60,15 @@ reciterSelect.addEventListener("change", () => {
 // Close modal when clicking outside of it
 window.addEventListener("click", (event) => {
   if (event.target == modal) {
-    modal.classList.add("fade-out");
-    const modalContent = modal.querySelector(".modal-content");
-    modalContent.classList.add("slide-out");
-
-    modalContent.addEventListener("animationend", () => {
-      modal.style.display = "none";
-      modal.classList.remove("fade-out");
-      modalContent.classList.remove("slide-out");
-    });
+    closeModal();
   }
+});
+
+modalContent.addEventListener("animationend", () => {
+  // only fire when it's being closed
+  if (!modal.classList.contains("fade-out")) return;
+  console.log("fired");
+  modal.style.display = "none";
+  modal.classList.remove("fade-out");
+  modalContent.classList.remove("slide-out");
 });
