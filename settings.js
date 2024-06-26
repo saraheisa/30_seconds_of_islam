@@ -18,6 +18,11 @@ let audioEdition = getReciterSelection() || "ar.alafasy"; // default reciter
 
 async function populateReciterSelect() {
   try {
+    // Check if reciterSelect is already populated
+    if (reciterSelect.options.length > 0) {
+      return;
+    }
+
     const response = await fetch(
       "https://api.alquran.cloud/v1/edition/format/audio"
     );
