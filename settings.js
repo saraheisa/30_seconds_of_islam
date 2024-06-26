@@ -67,7 +67,6 @@ window.addEventListener("click", (event) => {
 modalContent.addEventListener("animationend", () => {
   // only fire when it's being closed
   if (!modal.classList.contains("fade-out")) return;
-  console.log("fired");
   modal.style.display = "none";
   modal.classList.remove("fade-out");
   modalContent.classList.remove("slide-out");
