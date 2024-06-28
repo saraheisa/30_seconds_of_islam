@@ -38,6 +38,12 @@
   cursor: pointer;
 }
 
+#completed-khatma-count {
+  margin-left: 10px;
+  color: #555;
+  font-weight: bold;
+}
+
 /* Select styling similar to macOS */
 .select-container {
   position: relative;

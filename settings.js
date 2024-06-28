@@ -6,6 +6,9 @@ const modalContent = modal.querySelector(".modal-content");
 const closeButton = document.querySelector(".close-button");
 const reciterSelect = document.getElementById("reciter-select");
 const khatmaModeCheckbox = document.getElementById("khatma-mode-checkbox");
+const completedKhatmaCountElement = document.getElementById(
+  "completed-khatma-count"
+);
 
 let audioEdition = getFromLocalStorage(KEYS.RECITER) || "ar.alafasy"; // default reciter
 
@@ -40,9 +43,18 @@ function closeModal() {
   modalContent.classList.add("slide-out");
 }
 
-settingsButton.addEventListener("click", () => {
+function presetSettingsModal() {
   populateReciterSelect();
+
   khatmaModeCheckbox.checked = getFromLocalStorage(KEYS.KHATMA_MODE) === "true";
+
+  let completedKhatma = +getFromLocalStorage(KEYS.NO_OF_COMPLETED_KHATMA);
+  if (completedKhatma)
+    completedKhatmaCountElement.textContent = `(${completedKhatma} completed)`;
+}
+
+settingsButton.addEventListener("click", () => {
+  presetSettingsModal();
   modal.style.display = "block";
 });
 
