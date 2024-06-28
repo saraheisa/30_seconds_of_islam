@@ -1,20 +1,13 @@
+import { KEYS, getFromLocalStorage, setToLocalStorage } from "./shared.js";
+
 const settingsButton = document.querySelector(".settings-button");
 const modal = document.getElementById("settings-modal");
 const modalContent = modal.querySelector(".modal-content");
 const closeButton = document.querySelector(".close-button");
 const reciterSelect = document.getElementById("reciter-select");
+const khatmaModeCheckbox = document.getElementById("khatma-mode-checkbox");
 
-const RECITER_KEY = "30_seconds_of_islam_reciter_selection";
-
-function storeReciterSelection(reciter) {
-  window.localStorage.setItem(RECITER_KEY, reciter);
-}
-
-function getReciterSelection() {
-  return window.localStorage.getItem(RECITER_KEY);
-}
-
-let audioEdition = getReciterSelection() || "ar.alafasy"; // default reciter
+let audioEdition = getFromLocalStorage(KEYS.RECITER) || "ar.alafasy"; // default reciter
 
 async function populateReciterSelect() {
   try {
@@ -49,6 +42,7 @@ function closeModal() {
 
 settingsButton.addEventListener("click", () => {
   populateReciterSelect();
+  khatmaModeCheckbox.checked = getFromLocalStorage(KEYS.KHATMA_MODE) === "true";
   modal.style.display = "block";
 });
 
@@ -59,7 +53,7 @@ closeButton.addEventListener("click", () => {
 reciterSelect.addEventListener("change", () => {
   const newReciter = reciterSelect.value;
   audioEdition = newReciter;
-  storeReciterSelection(newReciter);
+  setToLocalStorage(KEYS.RECITER, newReciter);
 });
 
 // Close modal when clicking outside of it
@@ -75,4 +69,10 @@ modalContent.addEventListener("animationend", () => {
   modal.style.display = "none";
   modal.classList.remove("fade-out");
   modalContent.classList.remove("slide-out");
+});
+
+/************** Khatma mode implementation ****************/
+
+khatmaModeCheckbox.addEventListener("change", () => {
+  setToLocalStorage(KEYS.KHATMA_MODE, !!khatmaModeCheckbox.checked);
 });

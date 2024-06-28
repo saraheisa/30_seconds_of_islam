@@ -1,33 +1,39 @@
+import {
+  THEME_OPTIONS,
+  KEYS,
+  getFromLocalStorage,
+  setToLocalStorage,
+  incrementLocalStorage,
+} from "./shared.js";
+
 const ayahText = document.querySelector(".ayah-text");
 const ayahTranslation = document.querySelector(".ayah-translation");
 const recitationButton = document.querySelector(".recitation-button");
 const themeToggle = document.querySelector("#theme-switch");
 
-const THEME_OPTIONS = {
-  Dark: "dark",
-  LIGHT: "light",
-};
-const THEME_KEY = "30_seconds_of_islam_theme_selection";
-
 let currentAyahNumber = 0;
 const bitrate = 64;
 const edition = "quran-uthmani";
 const translationEdition = "en.asad";
+const TOTAL_NO_OF_AYAH = 6236;
 
-async function getRandomAyah() {
+function getKhatmaMode() {
+  return getFromLocalStorage(KEYS.KHATMA_MODE) === "true";
+}
+
+async function fetchAyahData(ayahNumber) {
+  const response = await fetch(
+    `https://api.alquran.cloud/v1/ayah/${ayahNumber}/editions/${edition},${translationEdition}`
+  );
+  if (!response.ok) {
+    throw new Error("Failed to fetch Ayah data");
+  }
+  return response.json();
+}
+
+async function displayAyah(ayahNumber) {
   try {
-    const surahNumber = Math.floor(Math.random() * 114) + 1;
-    const ayahCountResponse = await fetch(
-      `https://api.alquran.cloud/v1/surah/${surahNumber}?offset=1&limit=1`
-    );
-    const ayahCountData = await ayahCountResponse.json();
-    const ayahCount = ayahCountData.data.numberOfAyahs;
-    const ayahNumber = Math.floor(Math.random() * ayahCount) + 1;
-
-    const response = await fetch(
-      `https://api.alquran.cloud/v1/ayah/${surahNumber}:${ayahNumber}/editions/${edition},${translationEdition}`
-    );
-    const data = await response.json();
+    const data = await fetchAyahData(ayahNumber);
     const ayah = data.data[0].text;
     const surah = data.data[0].surah.name;
     const translation = data.data[1].text;
@@ -37,18 +43,40 @@ async function getRandomAyah() {
     ayahText.innerHTML = `${ayah} (${surah} ${ayahNumber})`;
     ayahTranslation.textContent = `${translation} (${surahTranslation} ${ayahNumber})`;
   } catch (error) {
-    console.log(error);
+    console.error(error);
     ayahText.innerHTML = "Error: Please try again later.";
   }
 }
 
+async function getRandomAyah() {
+  const ayahNumber = Math.floor(Math.random() * TOTAL_NO_OF_AYAH) + 1;
+  await displayAyah(ayahNumber);
+}
+
+async function getNextAyahInKhatma() {
+  let ayahNumber = +getFromLocalStorage(KEYS.KHATMA_LAST_AYAH, 0) + 1;
+
+  if (ayahNumber === TOTAL_NO_OF_AYAH)
+    incrementLocalStorage(KEYS.NO_OF_COMPLETED_KHATMA);
+  else if (ayahNumber > TOTAL_NO_OF_AYAH) ayahNumber = 1;
+
+  await displayAyah(ayahNumber);
+
+  setToLocalStorage(KEYS.KHATMA_LAST_AYAH, ayahNumber);
+}
+
+function getAyahToDisplay() {
+  if (getKhatmaMode()) getNextAyahInKhatma();
+  else getRandomAyah();
+}
+
 function storeThemeSelection(theme) {
   if (theme !== THEME_OPTIONS.Dark && theme !== THEME_OPTIONS.LIGHT) return;
-  window.localStorage.setItem(THEME_KEY, theme);
+  setToLocalStorage(KEYS.THEME, theme);
 }
 
 function getThemeSelection() {
-  return window.localStorage.getItem(THEME_KEY) || THEME_OPTIONS.Dark;
+  return getFromLocalStorage(KEYS.THEME, THEME_OPTIONS.Dark);
 }
 
 function applyTheme(theme) {
@@ -70,12 +98,8 @@ function setInitialTheme(theme) {
   applyTheme(theme);
 }
 
-getRandomAyah();
-
-const selectedTheme = getThemeSelection();
-setInitialTheme(selectedTheme);
-
 recitationButton.addEventListener("click", () => {
+  let audioEdition = getFromLocalStorage(KEYS.RECITER);
   const audioURL = `https://cdn.islamic.network/quran/audio/${bitrate}/${audioEdition}/${currentAyahNumber}.mp3`;
   const audio = new Audio(audioURL);
   audio.play();
@@ -88,3 +112,8 @@ themeToggle.addEventListener("change", () => {
   applyTheme(newTheme);
   storeThemeSelection(newTheme);
 });
+
+getAyahToDisplay();
+
+const selectedTheme = getThemeSelection();
+setInitialTheme(selectedTheme);
