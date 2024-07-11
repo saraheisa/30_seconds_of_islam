@@ -45,6 +45,7 @@ async function displayAyah(ayahNumber) {
   } catch (error) {
     console.error(error);
     ayahText.innerHTML = "Error: Please try again later.";
+    throw error;
   }
 }
 
@@ -54,15 +55,18 @@ async function getRandomAyah() {
 }
 
 async function getNextAyahInKhatma() {
-  let ayahNumber = +getFromLocalStorage(KEYS.KHATMA_LAST_AYAH, 0) + 1;
+  try {
+    let ayahNumber = +getFromLocalStorage(KEYS.KHATMA_LAST_AYAH, 0) + 1;
 
-  if (ayahNumber === TOTAL_NO_OF_AYAH)
-    incrementLocalStorage(KEYS.NO_OF_COMPLETED_KHATMA);
-  else if (ayahNumber > TOTAL_NO_OF_AYAH) ayahNumber = 1;
+    if (ayahNumber > TOTAL_NO_OF_AYAH) ayahNumber = 1;
 
-  await displayAyah(ayahNumber);
+    await displayAyah(ayahNumber);
 
-  setToLocalStorage(KEYS.KHATMA_LAST_AYAH, ayahNumber);
+    if (ayahNumber === TOTAL_NO_OF_AYAH)
+      incrementLocalStorage(KEYS.NO_OF_COMPLETED_KHATMA);
+
+    setToLocalStorage(KEYS.KHATMA_LAST_AYAH, ayahNumber);
+  } catch (error) {}
 }
 
 function getAyahToDisplay() {
