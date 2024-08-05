@@ -38,10 +38,11 @@ async function displayAyah(ayahNumber) {
     const surah = data.data[0].surah.name;
     const translation = data.data[1].text;
     const surahTranslation = data.data[1].surah.englishName;
+    const numberInSurah = data.data[0].numberInSurah;
 
     currentAyahNumber = data.data[0].number;
-    ayahText.innerHTML = `${ayah} (${surah} ${ayahNumber})`;
-    ayahTranslation.textContent = `${translation} (${surahTranslation} ${ayahNumber})`;
+    ayahText.innerHTML = `${ayah} (${surah} ${numberInSurah})`;
+    ayahTranslation.textContent = `${translation} (${surahTranslation} ${numberInSurah})`;
   } catch (error) {
     console.error(error);
     ayahText.innerHTML = "Error: Please try again later.";
